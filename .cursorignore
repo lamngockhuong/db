@@ -1,0 +1,59 @@
+# Database data directories
+postgres_data/
+mysql_data/
+
+# Results directory
+results/
+
+# Docker volumes
+docker-volumes/
+
+# Build and cache directories
+dist/
+build/
+__pycache__/
+.pytest_cache/
+node_modules/
+
+# Large binary files
+*.db
+*.sqlite
+*.sqlite3
+*.dump
+*.backup
+*.bak
+
+# Log files
+*.log
+logs/
+
+# Temporary files
+*.tmp
+*.temp
+tmp/
+temp/
+
+# Test coverage reports
+coverage/
+.coverage
+htmlcov/
+
+# Environment files
+.env
+.env.*
+
+# IDE specific
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db

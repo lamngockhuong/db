@@ -1,0 +1,33 @@
+services:
+  postgres_17:
+    build:
+      context: .
+      dockerfile: tests/postgresql/Dockerfile_17
+    container_name: postgres_17_test
+    environment:
+      POSTGRES_USER: testuser
+      POSTGRES_PASSWORD: testpass
+      POSTGRES_DB: testdb
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  mysql_9:
+    build:
+      context: .
+      dockerfile: tests/mysql/Dockerfile_9
+    container_name: mysql_9_test
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpass
+      MYSQL_USER: testuser
+      MYSQL_PASSWORD: testpass
+      MYSQL_DATABASE: testdb
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+volumes:
+  postgres_data:
+  mysql_data:
