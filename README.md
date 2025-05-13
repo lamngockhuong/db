@@ -19,19 +19,19 @@ This repository contains test cases and scenarios for PostgreSQL and MySQL datab
 ```
 .
 ├── tests/                    # Test cases directory
-│   ├── postgresql/          # PostgreSQL test cases
-│   │   └── length_test/     # Tests for string length functions
-│   └── mysql/              # MySQL test cases
-│       └── length_test/     # Tests for string length functions
-├── scripts/                 # Utility scripts
-│   ├── run_containers.sh   # Container management script
-│   ├── run_sql.sh         # SQL execution script
-│   └── common.sh          # Common functions for scripts
-├── results/                # Test results and logs
-├── docker-compose.yml      # Container configuration
-├── .gitignore             # Git ignore rules
-├── .cursorignore          # Cursor IDE ignore rules
-└── LICENSE                # MIT License file
+│   ├── postgresql/           # PostgreSQL test cases
+│   │   └── length_test/      # Tests for string length functions
+│   └── mysql/                # MySQL test cases
+│       └── length_test/      # Tests for string length functions
+├── scripts/                  # Utility scripts
+│   ├── run_containers.sh     # Container management script
+│   ├── run_sql.sh            # SQL execution script
+│   └── common.sh             # Common functions for scripts
+├── results/                  # Test results and logs
+├── docker-compose.yml        # Container configuration
+├── .gitignore                # Git ignore rules
+├── .cursorignore             # Cursor IDE ignore rules
+└── LICENSE                   # MIT License file
 ```
 
 ## Database Configuration
