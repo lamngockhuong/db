@@ -1,8 +1,8 @@
-# Repository Kiểm Thử Cơ Sở Dữ Liệu
+# Database Testing Repository
 
-Repository này chứa các test case và kịch bản kiểm thử cho PostgreSQL và MySQL. Nó được thiết kế để giúp các nhà phát triển kiểm tra các tính năng, hành vi và trường hợp đặc biệt của cơ sở dữ liệu trên các phiên bản khác nhau.
+Repository này chứa các test case và kịch bản kiểm thử cho PostgreSQL và MySQL. Nó được thiết kế để giúp các nhà phát triển kiểm tra các tính năng, hành vi và trường hợp đặc biệt của database trên các phiên bản khác nhau.
 
-## Các Phiên Bản Cơ Sở Dữ Liệu Được Hỗ Trợ
+## Các Phiên Bản Database Được Hỗ Trợ
 
 ### PostgreSQL
 
@@ -14,7 +14,7 @@ Repository này chứa các test case và kịch bản kiểm thử cho PostgreS
 - 9 (Port: 3390)
 - 8 (Port: 3380)
 
-## Cấu Trúc Repository
+## Repository Structure
 
 ```
 .
@@ -34,7 +34,7 @@ Repository này chứa các test case và kịch bản kiểm thử cho PostgreS
 └── LICENSE                   # File giấy phép MIT
 ```
 
-## Cấu Hình Cơ Sở Dữ Liệu
+## Database Configuration
 
 ### PostgreSQL
 
@@ -51,16 +51,16 @@ Repository này chứa các test case và kịch bản kiểm thử cho PostgreS
 - Database mặc định: testdb
 - Lưu trữ dữ liệu: Có (Docker volumes)
 
-## Các Loại Test
+## Test Categories
 
-1. **Thao Tác Cơ Bản**
+1. **Basic Operations**
 
    - Các thao tác CRUD
    - Kiểu dữ liệu và ràng buộc
    - Index và hiệu năng
    - Truy vấn SQL cơ bản và join
 
-2. **Tính Năng Nâng Cao**
+2. **Advanced Features**
 
    - Giao dịch và tính chất ACID
    - Đồng thời và khóa
@@ -68,22 +68,22 @@ Repository này chứa các test case và kịch bản kiểm thử cho PostgreS
    - Stored procedure và function
    - Trigger và event
 
-3. **Trường Hợp Đặc Biệt**
+3. **Edge Cases**
    - Xử lý lỗi và khôi phục
    - Điều kiện biên
    - Hiệu năng dưới tải
    - Kịch bản toàn vẹn dữ liệu
    - Tính năng đặc thù theo phiên bản
 
-## Bắt Đầu
+## Getting Started
 
-### Yêu Cầu
+### Prerequisites
 
 - Đã cài đặt Docker hoặc Podman
 - Đã cài đặt Docker Compose hoặc Podman Compose
 - Kiến thức cơ bản về SQL và khái niệm cơ sở dữ liệu
 
-### Chạy Test
+### Running Tests
 
 1. Khởi động container cơ sở dữ liệu cần thiết:
 
@@ -143,7 +143,7 @@ Repository này chứa các test case và kịch bản kiểm thử cho PostgreS
    ./scripts/run_containers.sh stop mysql_9_test      # Dừng MySQL 9
    ```
 
-### Quản Lý Container
+### Container Management
 
 Repository bao gồm script quản lý container (`scripts/run_containers.sh`) với các lệnh sau:
 
@@ -156,43 +156,43 @@ Repository bao gồm script quản lý container (`scripts/run_containers.sh`) v
 ./scripts/run_containers.sh list    # Liệt kê container có sẵn
 ```
 
-## Quy Tắc Thực Hành Tốt
+## Best Practices
 
-1. **Cô Lập Test**
+1. **Test Isolation**
 
    - Mỗi test phải độc lập và tự chứa
    - Dọn dẹp dữ liệu test sau khi thực thi
    - Sử dụng transaction khi phù hợp
    - Tránh phụ thuộc giữa các test
 
-2. **Tài Liệu**
+2. **Documentation**
 
    - Tài liệu hóa điều kiện tiên quyết và cài đặt
    - Bao gồm kết quả mong đợi và trường hợp đặc biệt
    - Ghi chú hành vi đặc thù theo phiên bản
    - Tài liệu hóa kỳ vọng về hiệu năng
 
-3. **Tương Thích Phiên Bản**
+3. **Version Compatibility**
 
    - Test trên tất cả các phiên bản được hỗ trợ
    - Tài liệu hóa tính năng đặc thù theo phiên bản
    - Xử lý khác biệt giữa các phiên bản phù hợp
    - Duy trì tương thích ngược
 
-4. **Bảo Mật**
+4. **Security**
 
    - Sử dụng mật khẩu an toàn trong môi trường production
    - Tuân thủ nguyên tắc đặc quyền tối thiểu
    - Bảo mật dữ liệu test nhạy cảm
    - Sử dụng biến môi trường cho thông tin xác thực
 
-5. **Hiệu Năng**
+5. **Performance**
    - Giám sát sử dụng tài nguyên
    - Dọn dẹp container không sử dụng
    - Sử dụng index phù hợp
    - Tối ưu hóa truy vấn test
 
-## Đóng Góp
+## Contributing
 
 Khi thêm test case mới:
 
@@ -207,7 +207,7 @@ Khi thêm test case mới:
 5. Tuân theo cấu trúc thư mục đã thiết lập
 6. Cập nhật README.md chính nếu cần thiết
 
-## Xử Lý Sự Cố
+## Troubleshooting
 
 Các vấn đề thường gặp và giải pháp:
 
@@ -228,6 +228,6 @@ Các vấn đề thường gặp và giải pháp:
    - Xác minh điều kiện tiên quyết
    - Xem xét log test
 
-## Giấy Phép
+## License
 
 Dự án này được cấp phép theo MIT License - xem file LICENSE để biết thêm chi tiết.
