@@ -34,7 +34,7 @@ services:
     ports:
       - "3380:3306"
     volumes:
-      - mysql_data_80:/var/lib/mysql
+      - mysql_data_8:/var/lib/mysql
 
   mysql_9_test:
     image: mysql:9.0
@@ -47,10 +47,10 @@ services:
     ports:
       - "3390:3306"
     volumes:
-      - mysql_data_90:/var/lib/mysql
+      - mysql_data_9:/var/lib/mysql
 
 volumes:
   postgres_data_16:
   postgres_data_17:
-  mysql_data_80:
-  mysql_data_90:
+  mysql_data_8:
+  mysql_data_9:

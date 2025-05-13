@@ -6,29 +6,50 @@ This repository contains test cases and scenarios for PostgreSQL and MySQL datab
 
 ### PostgreSQL
 
-- 17
-- 16
+- 17 (Port: 5417)
+- 16 (Port: 5416)
 
 ### MySQL
 
-- 9
-- 8
+- 9 (Port: 3390)
+- 8 (Port: 3380)
 
 ## Repository Structure
 
 ```
 .
-├── tests/
+├── tests/                    # Test cases directory
 │   ├── postgresql/          # PostgreSQL test cases
-│   │   ├── version_17/      # Tests specific to PostgreSQL 17
-│   │   └── version_16/      # Tests specific to PostgreSQL 16
+│   │   └── length_test/     # Tests for string length functions
 │   └── mysql/              # MySQL test cases
-│       ├── version_9/      # Tests specific to MySQL 9
-│       └── version_8/      # Tests specific to MySQL 8
-├── scripts/
-│   └── run_containers.sh   # Container management script
-└── docker-compose.yml      # Container configuration
+│       └── length_test/     # Tests for string length functions
+├── scripts/                 # Utility scripts
+│   ├── run_containers.sh   # Container management script
+│   ├── run_sql.sh         # SQL execution script
+│   └── common.sh          # Common functions for scripts
+├── results/                # Test results and logs
+├── docker-compose.yml      # Container configuration
+├── .gitignore             # Git ignore rules
+├── .cursorignore          # Cursor IDE ignore rules
+└── LICENSE                # MIT License file
 ```
+
+## Database Configuration
+
+### PostgreSQL
+
+- Default user: testuser
+- Default password: testpass
+- Default database: testdb
+- Data persistence: Yes (Docker volumes)
+
+### MySQL
+
+- Root password: rootpass
+- Default user: testuser
+- Default password: testpass
+- Default database: testdb
+- Data persistence: Yes (Docker volumes)
 
 ## Test Categories
 
@@ -37,17 +58,22 @@ This repository contains test cases and scenarios for PostgreSQL and MySQL datab
    - CRUD operations
    - Data types and constraints
    - Indexes and performance
+   - Basic SQL queries and joins
 
 2. **Advanced Features**
 
    - Transactions and ACID properties
    - Concurrency and locking
    - Partitioning and sharding
+   - Stored procedures and functions
+   - Triggers and events
 
 3. **Edge Cases**
-   - Error handling
+   - Error handling and recovery
    - Boundary conditions
    - Performance under load
+   - Data integrity scenarios
+   - Version-specific features
 
 ## Getting Started
 
@@ -55,26 +81,116 @@ This repository contains test cases and scenarios for PostgreSQL and MySQL datab
 
 - Docker or Podman installed
 - Docker Compose or Podman Compose
+- Basic knowledge of SQL and database concepts
 
 ### Running Tests
 
 1. Start the required database container:
 
    ```bash
+   # Using Docker (default)
    ./scripts/run_containers.sh start postgres_17_test  # For PostgreSQL 17
    # or
    ./scripts/run_containers.sh start mysql_9_test      # For MySQL 9
+
+   # Using Podman
+   CONTAINER_RUNTIME=podman ./scripts/run_containers.sh start postgres_17_test
    ```
 
-2. Navigate to the specific test directory:
+2. Execute SQL test files:
 
    ```bash
-   cd tests/postgresql/version_17  # For PostgreSQL 17 tests
-   # or
-   cd tests/mysql/version_9        # For MySQL 9 tests
+   # Run PostgreSQL test
+   ./scripts/run_sql.sh tests/postgresql/length_test/length_test.sql postgres 17
+
+   # Run MySQL test
+   ./scripts/run_sql.sh tests/mysql/length_test/length_test.sql mysql 9
    ```
 
-3. Execute the test cases
+   The script will:
+
+   - Execute the SQL file in the specified database container
+   - Save the output to the results directory with timestamp
+   - Display the results in the terminal
+
+3. Check test results:
+
+   ```bash
+   # View PostgreSQL test results
+   ls -l results/postgresql/version_17/
+
+   # View MySQL test results
+   ls -l results/mysql/version_9/
+   ```
+
+   Test results are saved in the following format:
+
+   ```
+   results/
+   ├── postgresql/
+   │   └── version_17/
+   │       └── length_test_YYYYMMDD_HHMMSS.log
+   └── mysql/
+       └── version_9/
+           └── length_test_YYYYMMDD_HHMMSS.log
+   ```
+
+4. Stop containers when done:
+
+   ```bash
+   ./scripts/run_containers.sh stop postgres_17_test  # Stop PostgreSQL 17
+   # or
+   ./scripts/run_containers.sh stop mysql_9_test      # Stop MySQL 9
+   ```
+
+### Container Management
+
+The repository includes a container management script (`scripts/run_containers.sh`) with the following commands:
+
+```bash
+./scripts/run_containers.sh help    # Show help
+./scripts/run_containers.sh start   # Start containers
+./scripts/run_containers.sh stop    # Stop containers
+./scripts/run_containers.sh status  # Show container status
+./scripts/run_containers.sh logs    # View container logs
+./scripts/run_containers.sh list    # List available containers
+```
+
+## Best Practices
+
+1. **Test Isolation**
+
+   - Each test should be independent and self-contained
+   - Clean up test data after execution
+   - Use transactions where appropriate
+   - Avoid test interdependencies
+
+2. **Documentation**
+
+   - Document test prerequisites and setup
+   - Include expected results and edge cases
+   - Note any version-specific behaviors
+   - Document performance expectations
+
+3. **Version Compatibility**
+
+   - Test across all supported versions
+   - Document version-specific features
+   - Handle version differences appropriately
+   - Maintain backward compatibility
+
+4. **Security**
+
+   - Use secure passwords in production
+   - Follow principle of least privilege
+   - Secure sensitive test data
+   - Use environment variables for credentials
+
+5. **Performance**
+   - Monitor resource usage
+   - Clean up unused containers
+   - Use appropriate indexes
+   - Optimize test queries
 
 ## Contributing
 
@@ -85,32 +201,33 @@ When adding new test cases:
    - Purpose of the test
    - Expected behavior
    - Any prerequisites or setup required
+   - Version compatibility notes
 3. Include sample data and expected results
 4. Document any version-specific behaviors
+5. Follow the established directory structure
+6. Update the main README.md if necessary
 
-## Container Management
+## Troubleshooting
 
-The repository includes a container management script (`scripts/run_containers.sh`) to help set up and manage database containers for testing. See the script's help for usage:
+Common issues and solutions:
 
-```bash
-./scripts/run_containers.sh help
-```
+1. **Container won't start**
 
-## Best Practices
+   - Check if ports are available
+   - Verify Docker/Podman is running
+   - Check container logs
 
-1. **Test Isolation**
+2. **Database connection issues**
 
-   - Each test should be independent
-   - Clean up test data after execution
-   - Use transactions where appropriate
+   - Verify container is running
+   - Check port mappings
+   - Verify credentials
 
-2. **Documentation**
+3. **Test failures**
+   - Check version compatibility
+   - Verify test prerequisites
+   - Review test logs
 
-   - Document test prerequisites
-   - Include expected results
-   - Note any version-specific behaviors
+## License
 
-3. **Version Compatibility**
-   - Test across all supported versions
-   - Document version-specific features
-   - Handle version differences appropriately
+This project is licensed under the MIT License - see the LICENSE file for details.
