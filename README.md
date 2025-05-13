@@ -1,149 +1,116 @@
-# Database Management Scripts
+# Database Testing Repository
 
-This repository contains scripts for managing PostgreSQL and MySQL databases using Docker/Podman containers.
+This repository contains test cases and scenarios for PostgreSQL and MySQL databases. It's designed to help developers test various database features, behaviors, and edge cases across different versions.
 
-## Prerequisites
+## Supported Database Versions
 
-- Docker or Podman installed
-- Docker Compose or Podman Compose installed
+### PostgreSQL
 
-## Container Runtime
+- 17
+- 16
 
-The scripts support both Docker and Podman. By default, Podman is used. You can change this by setting the `CONTAINER_RUNTIME` environment variable:
+### MySQL
 
-```bash
-# Use Docker
-export CONTAINER_RUNTIME=docker
+- 9
+- 8
 
-# Use Podman (default)
-export CONTAINER_RUNTIME=podman
-```
-
-## Available Scripts
-
-### 1. Container Management (`scripts/run_containers.sh`)
-
-This script helps you manage your database containers.
-
-#### Usage
-
-```bash
-./scripts/run_containers.sh [command] [container_name]
-```
-
-#### Commands
-
-- `start [container_name]`: Start all containers or a specific container
-
-  ```bash
-  # Start all containers
-  ./scripts/run_containers.sh start
-
-  # Start specific container
-  ./scripts/run_containers.sh start postgres_17_test
-  ./scripts/run_containers.sh start mysql_9_test
-  ```
-
-- `stop [container_name]`: Stop all containers or a specific container
-
-  ```bash
-  # Stop all containers
-  ./scripts/run_containers.sh stop
-
-  # Stop specific container
-  ./scripts/run_containers.sh stop postgres_17_test
-  ./scripts/run_containers.sh stop mysql_9_test
-  ```
-
-- `status`: Show container status
-
-  ```bash
-  ./scripts/run_containers.sh status
-  ```
-
-- `logs [container_name]`: Show container logs
-
-  ```bash
-  ./scripts/run_containers.sh logs postgres_17_test
-  ./scripts/run_containers.sh logs mysql_9_test
-  ```
-
-- `list`: List available containers
-
-  ```bash
-  ./scripts/run_containers.sh list
-  ```
-
-- `help`: Show help message
-  ```bash
-  ./scripts/run_containers.sh help
-  ```
-
-### 2. SQL Execution (`scripts/run_sql.sh`)
-
-This script helps you execute SQL files in your database containers.
-
-#### Usage
-
-```bash
-./scripts/run_sql.sh <sql_file> [db_type]
-```
-
-#### Parameters
-
-- `sql_file`: Path to your SQL file
-- `db_type`: Database type (postgres or mysql, default: postgres)
-
-#### Examples
-
-```bash
-# Execute SQL file in PostgreSQL
-./scripts/run_sql.sh your_query.sql
-
-# Execute SQL file in MySQL
-./scripts/run_sql.sh your_query.sql mysql
-```
-
-#### Output
-
-SQL execution results will be saved in the `results` directory:
-
-- PostgreSQL results: `results/postgresql/`
-- MySQL results: `results/mysql/`
-
-## Container Information
-
-### PostgreSQL Container
-
-- Container name: `postgres_17_test`
-- Port: 5432
-- Credentials:
-  - Username: testuser
-  - Password: testpass
-  - Database: testdb
-
-### MySQL Container
-
-- Container name: `mysql_9_test`
-- Port: 3306
-- Credentials:
-  - Username: testuser
-  - Password: testpass
-  - Database: testdb
-
-## Directory Structure
+## Repository Structure
 
 ```
 .
-├── docker-compose.yml
-├── README.md
-├── results/
-│   ├── postgresql/
-│   └── mysql/
+├── tests/
+│   ├── postgresql/          # PostgreSQL test cases
+│   │   ├── version_17/      # Tests specific to PostgreSQL 17
+│   │   └── version_16/      # Tests specific to PostgreSQL 16
+│   └── mysql/              # MySQL test cases
+│       ├── version_9/      # Tests specific to MySQL 9
+│       └── version_8/      # Tests specific to MySQL 8
 ├── scripts/
-│   ├── run_containers.sh
-│   └── run_sql.sh
-└── tests/
-    ├── mysql/
-    └── postgresql/
+│   └── run_containers.sh   # Container management script
+└── docker-compose.yml      # Container configuration
 ```
+
+## Test Categories
+
+1. **Basic Operations**
+
+   - CRUD operations
+   - Data types and constraints
+   - Indexes and performance
+
+2. **Advanced Features**
+
+   - Transactions and ACID properties
+   - Concurrency and locking
+   - Partitioning and sharding
+
+3. **Edge Cases**
+   - Error handling
+   - Boundary conditions
+   - Performance under load
+
+## Getting Started
+
+### Prerequisites
+
+- Docker or Podman installed
+- Docker Compose or Podman Compose
+
+### Running Tests
+
+1. Start the required database container:
+
+   ```bash
+   ./scripts/run_containers.sh start postgres_17_test  # For PostgreSQL 17
+   # or
+   ./scripts/run_containers.sh start mysql_9_test      # For MySQL 9
+   ```
+
+2. Navigate to the specific test directory:
+
+   ```bash
+   cd tests/postgresql/version_17  # For PostgreSQL 17 tests
+   # or
+   cd tests/mysql/version_9        # For MySQL 9 tests
+   ```
+
+3. Execute the test cases
+
+## Contributing
+
+When adding new test cases:
+
+1. Create a new directory for your test category if it doesn't exist
+2. Add a README.md in your test directory explaining:
+   - Purpose of the test
+   - Expected behavior
+   - Any prerequisites or setup required
+3. Include sample data and expected results
+4. Document any version-specific behaviors
+
+## Container Management
+
+The repository includes a container management script (`scripts/run_containers.sh`) to help set up and manage database containers for testing. See the script's help for usage:
+
+```bash
+./scripts/run_containers.sh help
+```
+
+## Best Practices
+
+1. **Test Isolation**
+
+   - Each test should be independent
+   - Clean up test data after execution
+   - Use transactions where appropriate
+
+2. **Documentation**
+
+   - Document test prerequisites
+   - Include expected results
+   - Note any version-specific behaviors
+
+3. **Version Compatibility**
+   - Test across all supported versions
+   - Document version-specific features
+   - Handle version differences appropriately

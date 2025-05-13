@@ -6,7 +6,7 @@ CREATE TABLE length_test (
     long_text VARCHAR(1000),
     short_char CHAR(10),
     medium_char CHAR(100),
-    long_char CHAR(1000)
+    long_char TEXT
 );
 
 -- Insert dữ liệu test

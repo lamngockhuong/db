@@ -1,20 +1,10 @@
 #!/bin/bash
 
-# Set container runtime (docker or podman)
-CONTAINER_RUNTIME=${CONTAINER_RUNTIME:-podman}
+# Source common functions
+source "$(dirname "$0")/common.sh"
 
 # Validate container runtime
-if ! command -v "$CONTAINER_RUNTIME" &> /dev/null; then
-    echo "Error: $CONTAINER_RUNTIME is not installed or not in PATH"
-    exit 1
-fi
-
-# Function to check if container is running
-is_container_running() {
-    local container_name=$1
-    "$CONTAINER_RUNTIME" ps -q -f name="$container_name" | grep -q .
-    return $?
-}
+validate_container_runtime
 
 # Function to start containers
 start_containers() {
@@ -23,8 +13,14 @@ start_containers() {
         echo "Starting all containers using $CONTAINER_RUNTIME..."
         "$CONTAINER_RUNTIME" compose up -d
     else
-        echo "Starting container $container_name using $CONTAINER_RUNTIME..."
-        "$CONTAINER_RUNTIME" compose up -d "$container_name"
+        if validate_container_name "$container_name"; then
+            echo "Starting container $container_name using $CONTAINER_RUNTIME..."
+            "$CONTAINER_RUNTIME" compose up -d "$container_name"
+        else
+            echo "Error: Invalid container name format. Use format: <db_type>_<version>_test"
+            echo "Example: postgres_17_test or mysql_9_test"
+            exit 1
+        fi
     fi
 }
 
@@ -52,24 +48,35 @@ show_logs() {
     local container_name=$1
     if [ -z "$container_name" ]; then
         echo "Available containers:"
-        echo "1. postgres_17_test"
-        echo "2. mysql_9_test"
+        list_containers
         read -p "Enter container name to view logs: " container_name
     fi
 
-    if is_container_running "$container_name"; then
-        echo "Showing logs for $container_name:"
-        "$CONTAINER_RUNTIME" logs -f "$container_name"
+    if validate_container_name "$container_name"; then
+        if is_container_running "$container_name"; then
+            echo "Showing logs for $container_name:"
+            "$CONTAINER_RUNTIME" logs -f "$container_name"
+        else
+            echo "Error: Container $container_name is not running"
+        fi
     else
-        echo "Error: Container $container_name is not running"
+        echo "Error: Invalid container name format. Use format: <db_type>_<version>_test"
+        echo "Example: postgres_17_test or mysql_9_test"
+        exit 1
     fi
 }
 
 # Function to list available containers
 list_containers() {
-    echo "Available containers:"
-    echo "1. postgres_17_test"
-    echo "2. mysql_9_test"
+    echo "Available PostgreSQL versions:"
+    for version in "${POSTGRES_VERSIONS[@]}"; do
+        echo "postgres_${version}_test"
+    done
+
+    echo -e "\nAvailable MySQL versions:"
+    for version in "${MYSQL_VERSIONS[@]}"; do
+        echo "mysql_${version}_test"
+    done
 }
 
 # Function to show help
@@ -85,9 +92,10 @@ show_help() {
     echo "  help    - Show this help message"
     echo ""
     echo "Examples:"
-    echo "  $0 start              # Start all containers"
-    echo "  $0 start postgres_17_test  # Start only PostgreSQL container"
-    echo "  $0 stop mysql_9_test  # Stop only MySQL container"
+    echo "  $0 start                   # Start all containers"
+    echo "  $0 start postgres_17_test  # Start PostgreSQL 17 container"
+    echo "  $0 start mysql_9_test      # Start MySQL 9 container"
+    echo "  $0 stop mysql_8_test       # Stop MySQL 8 container"
     echo ""
     echo "Note: Set CONTAINER_RUNTIME environment variable to 'docker' or 'podman' (default: podman)"
 }

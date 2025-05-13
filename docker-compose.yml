@@ -1,22 +1,43 @@
 services:
-  postgres_17:
-    build:
-      context: .
-      dockerfile: tests/postgresql/Dockerfile_17
+  postgres_16_test:
+    image: postgres:16
+    container_name: postgres_16_test
+    environment:
+      POSTGRES_USER: testuser
+      POSTGRES_PASSWORD: testpass
+      POSTGRES_DB: testdb
+    ports:
+      - "5416:5432"
+    volumes:
+      - postgres_data_16:/var/lib/postgresql/data
+
+  postgres_17_test:
+    image: postgres:17
     container_name: postgres_17_test
     environment:
       POSTGRES_USER: testuser
       POSTGRES_PASSWORD: testpass
       POSTGRES_DB: testdb
     ports:
-      - "5432:5432"
+      - "5417:5432"
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - postgres_data_17:/var/lib/postgresql/data
 
-  mysql_9:
-    build:
-      context: .
-      dockerfile: tests/mysql/Dockerfile_9
+  mysql_8_test:
+    image: mysql:8.0
+    container_name: mysql_8_test
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpass
+      MYSQL_USER: testuser
+      MYSQL_PASSWORD: testpass
+      MYSQL_DATABASE: testdb
+    ports:
+      - "3380:3306"
+    volumes:
+      - mysql_data_80:/var/lib/mysql
+
+  mysql_9_test:
+    image: mysql:9.0
     container_name: mysql_9_test
     environment:
       MYSQL_ROOT_PASSWORD: rootpass
@@ -24,10 +45,12 @@ services:
       MYSQL_PASSWORD: testpass
       MYSQL_DATABASE: testdb
     ports:
-      - "3306:3306"
+      - "3390:3306"
     volumes:
-      - mysql_data:/var/lib/mysql
+      - mysql_data_90:/var/lib/mysql
 
 volumes:
-  postgres_data:
-  mysql_data:
+  postgres_data_16:
+  postgres_data_17:
+  mysql_data_80:
+  mysql_data_90:
